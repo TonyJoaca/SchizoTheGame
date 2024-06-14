@@ -1,0 +1,4 @@
+repository "Schizo-NewerVersion@JoacaINC@cloud"
+  path "/"
+    br "/main"
+    co "/main"
