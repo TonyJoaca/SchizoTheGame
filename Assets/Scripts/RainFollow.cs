@@ -14,7 +14,6 @@ public class RainFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(_target.transform.position.z);
         transform.position = new(_target.position.x, transform.position.y, _target.position.z);
     }
 }

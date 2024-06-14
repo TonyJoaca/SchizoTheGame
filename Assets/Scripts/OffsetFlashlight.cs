@@ -7,6 +7,7 @@ public class OffsetFlashlight : MonoBehaviour
 	[SerializeField] Vector3 _vectOffset;
 	[SerializeField] GameObject _goFollow;
 	[SerializeField] float _speed = 1.0f;
+	[SerializeField] bool _isCutscene = false;
 
 	void Start()
 	{
@@ -15,10 +16,7 @@ public class OffsetFlashlight : MonoBehaviour
 
 	void Update()
 	{
-		transform.SetPositionAndRotation(_goFollow.transform.position + _vectOffset, Quaternion.Slerp(transform.rotation, _goFollow.transform.rotation, _speed * Time.deltaTime));
+		if(!_isCutscene)
+			transform.SetPositionAndRotation(_goFollow.transform.position + _vectOffset, Quaternion.Slerp(transform.rotation, _goFollow.transform.rotation, _speed * Time.deltaTime));
     }
-	public void CallThunder(){
-		LightsController._thunder = true;
-		BlackScreenTransition._canDoTransition = true;
-	}
 }

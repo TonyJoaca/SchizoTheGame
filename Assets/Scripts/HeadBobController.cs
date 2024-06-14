@@ -1,39 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class HeadBobController : MonoBehaviour
 {
-    [SerializeField, Range(2f,3f)] private float _amplitude = 2f;
-    [SerializeField, Range(8f,12f)] private float _frequency = 8f;
+    public static float _amplitude = 2f;
+    public static float _frequency = 8f;
     [SerializeField] private Transform _camera = null;
     [SerializeField] private Transform _cameraHolder = null;
-    private readonly float toggleSpeed = 1.5f;
-    Vector3 startPos;
-    CharacterController controller;
+    private readonly float _toggleSpeed = 1.5f;
+    Vector3 _startPos;
+    CharacterController _controller;
+    [SerializeField] bool _isCutscene;
+    float _prevMag;
     // Start is called before the first frame update
     void Start()
     {
-        controller = GetComponent<CharacterController>();
-        startPos = _camera.localPosition;
+        _controller = GetComponent<CharacterController>();
+        _startPos = _camera.localPosition;
+        _prevMag = transform.position.magnitude;
     }
 
     // Update is called once per frame
     void Update()
     {
-        _amplitude = Mathf.Clamp(_amplitude, 2f, 3f);
-        _frequency = Mathf.Clamp(_frequency, 8f, 12f);
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            _amplitude++;
-            _frequency++;
-        }else{
-            _amplitude--;
-            _frequency--;
-        }
+        if(!_isCutscene)
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                _amplitude = 3f;
+                _frequency = 12f;
+            }else{
+                _amplitude = 2f;
+                _frequency = 8f;
+            }
         CheckMotion();
         ResetPosition();
         _camera.LookAt(FocusTarget());
+        Debug.Log(transform.position.magnitude);
     }
 
     void PlayMotion(Vector3 motion){
@@ -41,10 +45,20 @@ public class HeadBobController : MonoBehaviour
     }
 
     void CheckMotion(){
-        float speed = new Vector3(controller.velocity.x, 0, controller.velocity.z).magnitude;
-        if (speed < toggleSpeed) return;
-        if(!controller.isGrounded) return;
-        PlayMotion(FootStepMotion());
+        switch(_isCutscene){
+            case true:
+                if(transform.position.magnitude != _prevMag){
+                    _prevMag = transform.position.magnitude;
+                    PlayMotion(FootStepMotion());
+                }
+                break;
+            case false:
+                float speed = new Vector3(_controller.velocity.x, 0, _controller.velocity.z).magnitude;
+                if (speed < _toggleSpeed) return;
+                if(!_controller.isGrounded) return;
+                    PlayMotion(FootStepMotion());
+                break;
+        }
     }
 
     Vector3 FootStepMotion(){
@@ -55,8 +69,8 @@ public class HeadBobController : MonoBehaviour
     }
 
     void ResetPosition(){
-        if (_camera.localPosition == startPos) return;
-        _camera.localPosition = Vector3.Lerp(_camera.localPosition, startPos, 1 * Time.deltaTime);
+        if (_camera.localPosition == _startPos) return;
+        _camera.localPosition = Vector3.Lerp(_camera.localPosition, _startPos, 1 * Time.deltaTime);
     } 
     Vector3 FocusTarget(){
         Vector3 pos = new(transform.position.x, transform.position.y + _cameraHolder.localPosition.y, transform.position.z);

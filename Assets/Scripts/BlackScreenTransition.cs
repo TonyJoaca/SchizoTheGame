@@ -28,9 +28,8 @@ public class BlackScreenTransition : MonoBehaviour
 
     IEnumerator StartTransition(){
         _canDoTransition = false;
-        yield return new WaitForSeconds(_delay);
         _curColor = Color.black;
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(3.2f);
         SceneManager.LoadScene(1);
     }
 }

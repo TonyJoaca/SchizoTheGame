@@ -51,6 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Schizo - Copy.sln",
+    "dotnet.defaultSolution": "Schizo-Git.sln",
     "dotnet.preferCSharpExtension": false
 }
