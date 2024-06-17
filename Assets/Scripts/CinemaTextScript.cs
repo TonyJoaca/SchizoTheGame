@@ -20,10 +20,8 @@ public class CinemaTextScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Mathf.Abs(180f - _player.rotation.eulerAngles.y));
         if((Mathf.Abs(180f - _player.rotation.eulerAngles.y) <= 20f) && _lookBehind){
             _text.text = _dialogue[1];
-            Debug.Log("Intors");
         }
     }
     private void OnTriggerEnter(Collider other) {

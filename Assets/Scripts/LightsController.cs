@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class LightsController : MonoBehaviour
@@ -19,6 +18,8 @@ public class LightsController : MonoBehaviour
     public static bool _thunder = false;
     [SerializeField] float _speed = 0.5f;
     [SerializeField] float _delayThunder = 0.5f;
+    [SerializeField] float _candleLightInten = 0.08f;
+    [SerializeField] float _normalLightInten = 8f;
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +48,10 @@ public class LightsController : MonoBehaviour
                         {
                             var lights = light.lights;
                             lights.enabled = true;
+                            if(light.gameObject.transform.parent.CompareTag("candle"))
+                                lights.intensity = _candleLightInten;
+                            else
+                                lights.intensity = _normalLightInten;
                         }
                         RenderSettings.fogColor = _onColor;
                         RenderSettings.fogDensity = RenderSettings.fogDensity = Mathf.Lerp(RenderSettings.fogDensity, _densityOn, _speed * Time.deltaTime);

@@ -16,6 +16,7 @@ public class DoorScript : MonoBehaviour
     float _currentRotationAngle; // Unghiul curent
     float _openTime = 0; // Timpul de miscare al usii
     [SerializeField] GameObject _doorKey;
+    [SerializeField] bool _isLocked;
     AudioSource _audioSource;
     AudioClip[] _doorSounds;
     bool _firstTimeUnlock = true;
@@ -33,7 +34,8 @@ public class DoorScript : MonoBehaviour
         if(_doorKey == null){
             _doorKey = new GameObject("Key");
             _doorKey.AddComponent<MeshRenderer>();
-            _doorKey.GetComponent<MeshRenderer>().enabled = false;
+            if(!_isLocked)
+                _doorKey.GetComponent<MeshRenderer>().enabled = false;
         }
     }
 
