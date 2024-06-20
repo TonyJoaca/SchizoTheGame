@@ -6,11 +6,13 @@ using UnityEngine.UI;
 
 public class BlackScreenTransition : MonoBehaviour
 {
-    public static bool _canDoTransition = false;
+    bool _canDoTransition = false;
+    public bool CanDoTransition {set {_canDoTransition = value;}}
     [SerializeField] float _speed = 0.5f;
     Image _image;
     Color _curColor;
-    [SerializeField] float _delay = 0.5f;
+    [SerializeField] float _delay = 3.2f;
+    [SerializeField] bool _changeScene = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +31,12 @@ public class BlackScreenTransition : MonoBehaviour
     IEnumerator StartTransition(){
         _canDoTransition = false;
         _curColor = Color.black;
-        yield return new WaitForSeconds(3.2f);
-        SceneManager.LoadScene(1);
+        yield return new WaitForSeconds(_delay);
+        if(_changeScene)
+            SceneManager.LoadScene(1);
+    }
+
+    public void ReverseTransition(){
+        _curColor = Color.clear;
     }
 }

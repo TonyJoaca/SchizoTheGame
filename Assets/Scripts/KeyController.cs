@@ -11,6 +11,8 @@ public class KeyController : MonoBehaviour
     [SerializeField] string[] _dialogueArray;
     Text _dialogueText;
     [SerializeField] bool _shouldCloseLights = false;
+    bool _textEnded = false;
+    public bool TextEnded {get {return _textEnded;}}
     private void Start() {
         gameObject.AddComponent<MeshRenderer>();
         _dialogueText = GameObject.Find("Dialogue").GetComponent<Text>();
@@ -36,15 +38,15 @@ public class KeyController : MonoBehaviour
     }
 
     IEnumerator CloseLights(){
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(4f);
         LightsController._lightsOn = false;
     }
     IEnumerator StartDialogue(){
-        _dialogueText.color = Color.white;
         foreach(string _dialogue in _dialogueArray){
             _dialogueText.text = _dialogue;
             yield return new WaitForSeconds(2f);
         }
-        _dialogueText.color = new(1,1,1,0);
+        _dialogueText.text = "";
+        _textEnded = true;
     }
 }

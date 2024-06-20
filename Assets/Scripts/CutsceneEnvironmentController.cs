@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CutsceneEnvironmentController : MonoBehaviour
 {
+    [SerializeField] GameObject _blackScreen;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +32,6 @@ public class CutsceneEnvironmentController : MonoBehaviour
 		CutsceneFootStepController._delay = 0.8f;
 	}
     public void DoTransition(){
-		BlackScreenTransition._canDoTransition = true;
+		_blackScreen.GetComponent<BlackScreenTransition>().CanDoTransition = true;
     }
 }

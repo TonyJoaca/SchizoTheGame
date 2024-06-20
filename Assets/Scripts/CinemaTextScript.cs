@@ -11,6 +11,7 @@ public class CinemaTextScript : MonoBehaviour
     TextMeshPro _text;
     [SerializeField] Transform _player;
     bool _lookBehind = false;
+    [SerializeField] GameObject _phantomLia;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,12 +21,14 @@ public class CinemaTextScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if((Mathf.Abs(180f - _player.rotation.eulerAngles.y) <= 20f) && _lookBehind){
+        if((Mathf.Abs(180f - _player.rotation.eulerAngles.y) <= 10f) && _lookBehind){
             _text.text = _dialogue[1];
+            _phantomLia.GetComponent<AnimatorController>().PhantomCanAdvance = true;
         }
     }
     private void OnTriggerEnter(Collider other) {
         _text.text = _dialogue[0];
         _lookBehind = true;
+        _phantomLia.GetComponent<AnimatorController>().PhantomCanAdvance = true;
     }
 }

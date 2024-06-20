@@ -50,7 +50,7 @@ public class LightsController : MonoBehaviour
                             lights.enabled = true;
                             if(light.gameObject.transform.parent.CompareTag("candle"))
                                 lights.intensity = _candleLightInten;
-                            else
+                            else if(!light.gameObject.transform.parent.CompareTag("chandelier"))
                                 lights.intensity = _normalLightInten;
                         }
                         RenderSettings.fogColor = _onColor;
@@ -61,8 +61,9 @@ public class LightsController : MonoBehaviour
                         foreach (ParticleSystem light in _lights)
                         {
                             var lights = light.lights;
-                            if(light.gameObject.name != "FireLight")
-                                lights.enabled = false;
+                            lights.enabled = false;
+                            if(light.gameObject.name == "Lamp_Lia" || light.gameObject.name == "FireLight")
+                                lights.enabled = true;
                         }
                         RenderSettings.fogColor = _offColor;
                         RenderSettings.fogDensity = Mathf.Lerp(RenderSettings.fogDensity, _densityOff, _speed * Time.deltaTime);

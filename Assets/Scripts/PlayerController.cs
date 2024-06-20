@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    CharacterController controller;
+    CharacterController _controller;
     float _speed = 6f;
-    Vector3 move;
+    Vector3 _move;
     [SerializeField] float _gravity = -9.81f;
     Vector3 velocity;
     [SerializeField] Transform _groundCheck;
@@ -21,10 +21,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] AudioClip[] _footsteps;
     float timer;
     float _delay = 0.5f;
+    bool _canMove = true;
+    public bool CanMove {set{_canMove = value;}}
     // Start is called before the first frame update
     void Start()
     {
-        controller = GetComponent<CharacterController>();
+        _controller = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -45,7 +47,7 @@ public class PlayerController : MonoBehaviour
         // }
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
-        move = x * transform.right + z * transform.forward + velocity;
+        _move = x * transform.right + z * transform.forward + velocity;
         if (Input.GetKey(KeyCode.LeftShift))
         {
             _delay = 0.5f;
@@ -54,10 +56,11 @@ public class PlayerController : MonoBehaviour
             _delay = 0.8f;
             _speed = 6f;
         }
-        controller.Move(_speed * Time.deltaTime * move.normalized);
+        if(_canMove)
+            _controller.Move(_speed * Time.deltaTime * _move.normalized);
         //controller.Move(velocity * Time.deltaTime);
         timer += Time.deltaTime;
-        if (new Vector3(controller.velocity.x, 0, controller.velocity.z).magnitude > 0.1f)
+        if ((new Vector3(_controller.velocity.x, 0, _controller.velocity.z).magnitude > 0.1f) && _canMove)
         {
             if (timer > _delay)
             {
@@ -68,11 +71,11 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            controller.enabled = false;
+            _controller.enabled = false;
             nebun = !nebun;
             transform.position = new Vector3(transform.position.x, transform.position.y + teleportDistance, transform.position.z);
             teleportDistance *= -1;
-            controller.enabled = true;
+            _controller.enabled = true;
         }
         if (Input.GetKeyUp(KeyCode.P))
         {
@@ -82,6 +85,11 @@ public class PlayerController : MonoBehaviour
             }else{
                 LightsController._lightsOn = true;
             }
+        }
+        if(Input.GetKeyDown(KeyCode.U)){
+            _canMove = !_canMove;
+            _controller.Move(Vector3.zero);
+            _controller.enabled = !_controller.enabled;
         }
     }
 }
